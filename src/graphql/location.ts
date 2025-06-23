@@ -12,7 +12,7 @@ export const GET_LOCATIONS = gql`
         type
         dimension
         residents {
-          id
+          name
         }
         created
       }

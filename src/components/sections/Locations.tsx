@@ -13,6 +13,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
@@ -72,16 +80,36 @@ export function Locations() {
     );
   } else {
     content = data.locations.results.map((location: LocationInfo) => (
-      <Card key={location.id}>
-        <CardHeader>
-          <CardTitle>{location.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CardDescription>{location.type}</CardDescription>
-          <CardDescription>{location.dimension}</CardDescription>
-          <CardDescription>{location.created}</CardDescription>
-        </CardContent>
-      </Card>
+      <Dialog key={location.id}>
+        <DialogTrigger>
+          <Card>
+            <CardHeader>
+              <CardTitle>{location.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>{location.type}</CardDescription>
+              <CardDescription>{location.dimension}</CardDescription>
+            </CardContent>
+          </Card>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{location.name}</DialogTitle>
+            <DialogDescription>
+              Type: {location.type}
+              <br />
+              Dimension: {location.dimension}
+              <br />
+              Created: {location.created.split("T")[0]}
+              <br />
+              Residents:{" "}
+              {location.residents.map((res, idx) =>
+                idx < location.residents.length - 1 ? `${res.name}, ` : res.name
+              )}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     ));
   }
 

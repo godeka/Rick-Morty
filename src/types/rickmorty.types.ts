@@ -16,7 +16,7 @@ export interface LocationInfo {
   name: string;
   type: string;
   dimension: string;
-  residents: Pick<CharacterInfo, "id">[];
+  residents: Pick<CharacterInfo, "name">[];
   created: string;
 }
 
