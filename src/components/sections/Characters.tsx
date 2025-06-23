@@ -5,6 +5,7 @@ import { GET_CHARACTERS } from "@/graphql/character";
 import type { CharacterInfo } from "@/types/rickmorty.types";
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
+import { RickmortySelect } from "../shared/RickmortySelect";
 
 import {
   Card,
@@ -17,14 +18,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 
+const STATUS_LIST = ["Alive", "Dead", "unknown"];
+
 export function Characters() {
   const [page, setPage] = useState<number>(1);
   const [name, setName] = useState<string>("");
+  const [status, setStatus] = useState<string>(""); // STATUS_LIST 중 하나의 값
 
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_CHARACTERS,
     {
-      variables: { page, name },
+      variables: { page, name, status },
       notifyOnNetworkStatusChange: true,
     }
   );
@@ -38,6 +42,13 @@ export function Characters() {
   const handleNameChange = (newName: string) => {
     if (newName !== name) {
       setName(newName);
+      setPage(1); // 다시 1페이지로
+    }
+  };
+
+  const handleStatusChange = (newStatus: string) => {
+    if (newStatus !== status) {
+      setStatus(newStatus);
       setPage(1); // 다시 1페이지로
     }
   };
@@ -87,6 +98,10 @@ export function Characters() {
 
   return (
     <div>
+      <RickmortySelect
+        valueList={STATUS_LIST}
+        handleValueChange={handleStatusChange}
+      />
       <RickmortySearchField name={name} handleNameChange={handleNameChange} />
       {content}
       <RickmortyPagination

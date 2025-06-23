@@ -1,0 +1,29 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+interface OwnProps {
+  valueList: string[];
+  handleValueChange: (newVal: string) => void;
+}
+
+export function RickmortySelect({ valueList, handleValueChange }: OwnProps) {
+  return (
+    <Select onValueChange={(newVal) => handleValueChange(newVal)}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Status" />
+      </SelectTrigger>
+      <SelectContent>
+        {valueList.map((value, idx) => (
+          <SelectItem key={idx} value={value}>
+            {value}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
