@@ -14,6 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
@@ -84,15 +92,39 @@ export function Characters() {
     );
   } else {
     content = data.characters.results.map((character: CharacterInfo) => (
-      <Card key={character.id}>
-        <CardHeader>
-          <CardTitle>{character.name}</CardTitle>
-          <CardDescription>{character.status}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <img src={character.image} alt={character.name} />
-        </CardContent>
-      </Card>
+      <Dialog key={character.id}>
+        <DialogTrigger>
+          <Card>
+            <CardHeader>
+              <CardTitle>{character.name}</CardTitle>
+              <CardDescription>{character.status}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <img src={character.image} alt={character.name} />
+            </CardContent>
+          </Card>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{character.name}</DialogTitle>
+            <DialogDescription>{character.status}</DialogDescription>
+            <img src={character.image} alt={character.name} />
+            <DialogDescription>
+              Species: {character.species}
+              <br />
+              {character.type && (
+                <>
+                  Type: {character.type}
+                  <br />
+                </>
+              )}
+              Gender: {character.gender}
+              <br />
+              Birthdate: {character.created.split("T")[0]}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     ));
   }
 
