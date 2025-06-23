@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { NetworkStatus, useQuery } from "@apollo/client";
+
 import { GET_EPISODES } from "@/graphql/episode";
 import type { EpisodeInfo } from "@/types/rickmorty.types";
+import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 
 import {
   Card,
@@ -14,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 
 export function Episodes() {
+  const [page, setPage] = useState<number>(1);
+
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_EPISODES,
     {
@@ -21,6 +26,13 @@ export function Episodes() {
       notifyOnNetworkStatusChange: true,
     }
   );
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage !== page) {
+      setPage(newPage);
+      refetch({ page: newPage });
+    }
+  };
 
   const isRefetching = networkStatus === NetworkStatus.refetch;
 
@@ -56,7 +68,7 @@ export function Episodes() {
 
   return (
     <div>
-      {data?.episodes.results.map((episode: EpisodeInfo) => (
+      {data.episodes.results.map((episode: EpisodeInfo) => (
         <Card>
           <CardHeader>
             <CardTitle>{episode.name}</CardTitle>
@@ -66,6 +78,11 @@ export function Episodes() {
           </CardContent>
         </Card>
       ))}
+      <RickmortyPagination
+        page={page}
+        totalPages={data.episodes.info.pages}
+        handlePageChange={handlePageChange}
+      />
     </div>
   );
 }

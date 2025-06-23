@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { NetworkStatus, useQuery } from "@apollo/client";
+
 import { GET_LOCATIONS } from "@/graphql/location";
 import type { LocationInfo } from "@/types/rickmorty.types";
+import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 
 import {
   Card,
@@ -14,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 
 export function Locations() {
+  const [page, setPage] = useState<number>(1);
+
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_LOCATIONS,
     {
@@ -21,6 +26,13 @@ export function Locations() {
       notifyOnNetworkStatusChange: true,
     }
   );
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage !== page) {
+      setPage(newPage);
+      refetch({ page: newPage });
+    }
+  };
 
   const isRefetching = networkStatus === NetworkStatus.refetch;
 
@@ -68,6 +80,11 @@ export function Locations() {
           </CardContent>
         </Card>
       ))}
+      <RickmortyPagination
+        page={page}
+        totalPages={data.locations.info.pages}
+        handlePageChange={handlePageChange}
+      />
     </div>
   );
 }
