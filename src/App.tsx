@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_CHARACTERS } from "./graphql/characters";
 import { GET_LOCATIONS } from "./graphql/location";
+import { GET_EPISODES } from "./graphql/episode";
 
 import "./App.css";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -30,6 +31,14 @@ interface LocationInfo {
   residents: Pick<CharacterInfo, "id">[];
   created: string;
 }
+interface EpisodeInfo {
+  id: number;
+  name: string;
+  air_date: string;
+  episode: string;
+  characters: Pick<CharacterInfo, "id">[];
+  created: string;
+}
 
 function App() {
   const { data: characters } = useQuery(GET_CHARACTERS, {
@@ -38,6 +47,7 @@ function App() {
   const { data: locations } = useQuery(GET_LOCATIONS, {
     variables: { page: 1 },
   });
+  const { data: episodes } = useQuery(GET_EPISODES, { variables: { page: 1 } });
 
   return (
     <div>
@@ -74,7 +84,18 @@ function App() {
             </Card>
           ))}
         </TabsContent>
-        <TabsContent value="episode">Episodes</TabsContent>
+        <TabsContent value="episode">
+          {episodes?.episodes.results.map((episode: EpisodeInfo) => (
+            <Card>
+              <CardHeader>
+                <CardTitle>{episode.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{episode.air_date}</CardDescription>
+              </CardContent>
+            </Card>
+          ))}
+        </TabsContent>
       </Tabs>
     </div>
   );
