@@ -39,8 +39,8 @@ export function Episodes() {
   if (loading || isRefetching)
     return (
       <div>
-        {Array.from({ length: 6 }).map((_) => (
-          <Card>
+        {Array.from({ length: 6 }).map((_, idx) => (
+          <Card key={idx}>
             <CardHeader>
               <CardTitle>
                 <Skeleton className="h-[20px] w-[100px]" />
@@ -69,7 +69,7 @@ export function Episodes() {
   return (
     <div>
       {data.episodes.results.map((episode: EpisodeInfo) => (
-        <Card>
+        <Card key={episode.id}>
           <CardHeader>
             <CardTitle>{episode.name}</CardTitle>
           </CardHeader>

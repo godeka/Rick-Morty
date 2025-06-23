@@ -39,8 +39,8 @@ export function Characters() {
   if (loading || isRefetching)
     return (
       <div>
-        {Array.from({ length: 6 }).map((_) => (
-          <Card>
+        {Array.from({ length: 6 }).map((_, idx) => (
+          <Card key={idx}>
             <CardHeader>
               <CardTitle>
                 <Skeleton className="h-[20px] w-[300px]" />
@@ -70,7 +70,7 @@ export function Characters() {
   return (
     <div>
       {data.characters.results.map((character: CharacterInfo) => (
-        <Card>
+        <Card key={character.id}>
           <CardHeader>
             <CardTitle>{character.name}</CardTitle>
             <CardDescription>{character.status}</CardDescription>

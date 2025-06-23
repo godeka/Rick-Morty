@@ -41,7 +41,12 @@ export function RickmortyPagination({
       );
     }
 
-    if (end < totalPages) pages.push(<PaginationEllipsis />);
+    if (end < totalPages)
+      pages.push(
+        <PaginationItem key="ellipsis">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
 
     return pages;
   };

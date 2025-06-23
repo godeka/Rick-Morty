@@ -39,8 +39,8 @@ export function Locations() {
   if (loading || isRefetching)
     return (
       <div>
-        {Array.from({ length: 6 }).map((_) => (
-          <Card>
+        {Array.from({ length: 6 }).map((_, idx) => (
+          <Card key={idx}>
             <CardHeader>
               <CardTitle>
                 <Skeleton className="h-[20px] w-[150px]" />
@@ -68,8 +68,8 @@ export function Locations() {
 
   return (
     <div>
-      {data?.locations.results.map((location: LocationInfo) => (
-        <Card>
+      {data.locations.results.map((location: LocationInfo) => (
+        <Card key={location.id}>
           <CardHeader>
             <CardTitle>{location.name}</CardTitle>
           </CardHeader>
