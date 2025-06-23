@@ -1,5 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_CHARACTERS } from "./graphql/characters";
+import { GET_LOCATIONS } from "./graphql/location";
+
 import "./App.css";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -20,9 +22,20 @@ interface CharacterInfo {
   type: string;
   created: string;
 }
+interface LocationInfo {
+  id: number;
+  name: string;
+  type: string;
+  dimension: string;
+  residents: Pick<CharacterInfo, "id">[];
+  created: string;
+}
 
 function App() {
-  const { data } = useQuery(GET_CHARACTERS, {
+  const { data: characters } = useQuery(GET_CHARACTERS, {
+    variables: { page: 1 },
+  });
+  const { data: locations } = useQuery(GET_LOCATIONS, {
     variables: { page: 1 },
   });
 
@@ -35,7 +48,7 @@ function App() {
           <TabsTrigger value="episode">Episode</TabsTrigger>
         </TabsList>
         <TabsContent value="character">
-          {data?.characters.results.map((character: CharacterInfo) => (
+          {characters?.characters.results.map((character: CharacterInfo) => (
             <Card>
               <CardHeader>
                 <CardTitle>{character.name}</CardTitle>
@@ -47,7 +60,20 @@ function App() {
             </Card>
           ))}
         </TabsContent>
-        <TabsContent value="location">Locations</TabsContent>
+        <TabsContent value="location">
+          {locations?.locations.results.map((location: LocationInfo) => (
+            <Card>
+              <CardHeader>
+                <CardTitle>{location.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{location.type}</CardDescription>
+                <CardDescription>{location.dimension}</CardDescription>
+                <CardDescription>{location.created}</CardDescription>
+              </CardContent>
+            </Card>
+          ))}
+        </TabsContent>
         <TabsContent value="episode">Episodes</TabsContent>
       </Tabs>
     </div>
