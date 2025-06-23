@@ -7,6 +7,8 @@ export interface CharacterInfo {
   species: string;
   type: string;
   created: string;
+  location: Pick<LocationInfo, "name">;
+  episode: Pick<EpisodeInfo, "name">[];
 }
 
 export interface LocationInfo {

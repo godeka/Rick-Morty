@@ -15,6 +15,12 @@ export const GET_CHARACTERS = gql`
         species
         type
         created
+        location {
+          name
+        }
+        episode {
+          name
+        }
       }
     }
   }

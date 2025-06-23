@@ -111,16 +111,15 @@ export function Characters() {
             <img src={character.image} alt={character.name} />
             <DialogDescription>
               Species: {character.species}
+              {character.type && ` / Type: ${character.type}`}
               <br />
-              {character.type && (
-                <>
-                  Type: {character.type}
-                  <br />
-                </>
-              )}
               Gender: {character.gender}
               <br />
               Birthdate: {character.created.split("T")[0]}
+              <br />
+              Location: {character.location.name}
+              <br />
+              Number of episodes appeared: {character.episode.length}
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
