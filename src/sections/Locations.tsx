@@ -32,7 +32,6 @@ export function Locations() {
   const handlePageChange = (newPage: number) => {
     if (newPage !== page) {
       setPage(newPage);
-      refetch({ page: newPage });
     }
   };
 

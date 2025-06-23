@@ -32,7 +32,6 @@ export function Characters() {
   const handlePageChange = (newPage: number) => {
     if (newPage !== page) {
       setPage(newPage);
-      refetch({ page: newPage });
     }
   };
 
