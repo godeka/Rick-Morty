@@ -1,9 +1,9 @@
 import "./App.css";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { Characters } from "./sections/Characters";
-import { Locations } from "./sections/Locations";
-import { Episodes } from "./sections/Episodes";
+import { Characters } from "./components/sections/Characters";
+import { Locations } from "./components/sections/Locations";
+import { Episodes } from "./components/sections/Episodes";
 
 function App() {
   return (
