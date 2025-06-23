@@ -25,6 +25,6 @@ export interface EpisodeInfo {
   name: string;
   air_date: string;
   episode: string;
-  characters: Pick<CharacterInfo, "id">[];
+  characters: Pick<CharacterInfo, "name">[];
   created: string;
 }

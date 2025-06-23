@@ -12,7 +12,7 @@ export const GET_EPISODES = gql`
         air_date
         episode
         characters {
-          id
+          name
         }
         created
       }
