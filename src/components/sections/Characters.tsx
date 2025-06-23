@@ -6,6 +6,7 @@ import type { CharacterInfo } from "@/types/rickmorty.types";
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
 import { RickmortySelect } from "../shared/RickmortySelect";
+import { RickmortyDialog } from "../shared/RickmortyDialog";
 
 import {
   Card,
@@ -14,14 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
@@ -91,40 +84,44 @@ export function Characters() {
       </>
     );
   } else {
-    content = data.characters.results.map((character: CharacterInfo) => (
-      <Dialog key={character.id}>
-        <DialogTrigger>
-          <Card>
-            <CardHeader>
-              <CardTitle>{character.name}</CardTitle>
-              <CardDescription>{character.status}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <img src={character.image} alt={character.name} />
-            </CardContent>
-          </Card>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{character.name}</DialogTitle>
-            <DialogDescription>{character.status}</DialogDescription>
+    content = data.characters.results.map((character: CharacterInfo) => {
+      const card = (
+        <Card>
+          <CardHeader>
+            <CardTitle>{character.name}</CardTitle>
+            <CardDescription>{character.status}</CardDescription>
+          </CardHeader>
+          <CardContent>
             <img src={character.image} alt={character.name} />
-            <DialogDescription>
-              Species: {character.species}
-              {character.type && ` / Type: ${character.type}`}
-              <br />
-              Gender: {character.gender}
-              <br />
-              Birthdate: {character.created.split("T")[0]}
-              <br />
-              Location: {character.location.name}
-              <br />
-              Number of episodes appeared: {character.episode.length}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    ));
+          </CardContent>
+        </Card>
+      );
+
+      const description = (
+        <>
+          Species: {character.species}
+          {character.type && ` / Type: ${character.type}`}
+          <br />
+          Gender: {character.gender}
+          <br />
+          Birthdate: {character.created.split("T")[0]}
+          <br />
+          Location: {character.location.name}
+          <br />
+          Number of episodes appeared: {character.episode.length}
+        </>
+      );
+
+      return (
+        <RickmortyDialog
+          card={card}
+          title={character.name}
+          subtitle={character.status}
+          description={description}
+          imageUrl={character.image}
+        />
+      );
+    });
   }
 
   return (

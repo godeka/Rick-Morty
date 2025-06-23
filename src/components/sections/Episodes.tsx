@@ -5,6 +5,7 @@ import { GET_EPISODES } from "@/graphql/episode";
 import type { EpisodeInfo } from "@/types/rickmorty.types";
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
+import { RickmortyDialog } from "../shared/RickmortyDialog";
 
 import {
   Card,
@@ -13,14 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
@@ -79,39 +72,42 @@ export function Episodes() {
       </>
     );
   } else {
-    content = data.episodes.results.map((episode: EpisodeInfo) => (
-      <Dialog key={episode.id}>
-        <DialogTrigger>
-          <Card>
-            <CardHeader>
-              <CardTitle>{episode.name}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>{episode.air_date}</CardDescription>
-            </CardContent>
-          </Card>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{episode.name}</DialogTitle>
-            <DialogDescription>
-              Code: {episode.episode}
-              <br />
-              Air date: {episode.air_date}
-              <br />
-              Created: {episode.created.split("T")[0]}
-              <br />
-              Characters:{" "}
-              {episode.characters.map((char, idx) =>
-                idx < episode.characters.length - 1
-                  ? `${char.name}, `
-                  : char.name
-              )}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    ));
+    content = data.episodes.results.map((episode: EpisodeInfo) => {
+      const card = (
+        <Card>
+          <CardHeader>
+            <CardTitle>{episode.name}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>{episode.air_date}</CardDescription>
+          </CardContent>
+        </Card>
+      );
+
+      const description = (
+        <>
+          Code: {episode.episode}
+          <br />
+          Air date: {episode.air_date}
+          <br />
+          Created: {episode.created.split("T")[0]}
+          <br />
+          <br />
+          Characters:{" "}
+          {episode.characters.map((char, idx) =>
+            idx < episode.characters.length - 1 ? `${char.name}, ` : char.name
+          )}
+        </>
+      );
+
+      return (
+        <RickmortyDialog
+          card={card}
+          title={episode.name}
+          description={description}
+        />
+      );
+    });
   }
 
   return (

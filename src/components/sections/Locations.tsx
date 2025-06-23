@@ -5,6 +5,7 @@ import { GET_LOCATIONS } from "@/graphql/location";
 import type { LocationInfo } from "@/types/rickmorty.types";
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
+import { RickmortyDialog } from "../shared/RickmortyDialog";
 
 import {
   Card,
@@ -13,14 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
@@ -79,38 +72,43 @@ export function Locations() {
       </>
     );
   } else {
-    content = data.locations.results.map((location: LocationInfo) => (
-      <Dialog key={location.id}>
-        <DialogTrigger>
-          <Card>
-            <CardHeader>
-              <CardTitle>{location.name}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>{location.type}</CardDescription>
-              <CardDescription>{location.dimension}</CardDescription>
-            </CardContent>
-          </Card>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{location.name}</DialogTitle>
-            <DialogDescription>
-              Type: {location.type}
-              <br />
-              Dimension: {location.dimension}
-              <br />
-              Created: {location.created.split("T")[0]}
-              <br />
-              Residents:{" "}
-              {location.residents.map((res, idx) =>
-                idx < location.residents.length - 1 ? `${res.name}, ` : res.name
-              )}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    ));
+    content = data.locations.results.map((location: LocationInfo) => {
+      const card = (
+        <Card>
+          <CardHeader>
+            <CardTitle>{location.name}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>{location.type}</CardDescription>
+            <CardDescription>{location.dimension}</CardDescription>
+          </CardContent>
+        </Card>
+      );
+
+      const description = (
+        <>
+          Type: {location.type}
+          <br />
+          Dimension: {location.dimension}
+          <br />
+          Created: {location.created.split("T")[0]}
+          <br />
+          <br />
+          Residents:{" "}
+          {location.residents.map((res, idx) =>
+            idx < location.residents.length - 1 ? `${res.name}, ` : res.name
+          )}
+        </>
+      );
+
+      return (
+        <RickmortyDialog
+          card={card}
+          title={location.name}
+          description={description}
+        />
+      );
+    });
   }
 
   return (
