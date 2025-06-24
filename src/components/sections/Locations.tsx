@@ -103,12 +103,15 @@ export function Locations() {
     });
   }
 
+  // Cursor AI 참고 - 카드 그리드 반응형으로 수정
   return (
     <div>
       <div className="pl-4">
         <RickmortySearchField name={name} handleNameChange={handleNameChange} />
       </div>
-      <div className="p-4 grid grid-cols-5 gap-4">{content}</div>
+      <div className="p-4 gap-4 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {content}
+      </div>
       <RickmortyPagination
         page={page}
         totalPages={data?.locations.info.pages}
