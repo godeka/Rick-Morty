@@ -16,29 +16,47 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Star } from "lucide-react";
 
-interface OwnProps {
-  episode?: EpisodeInfo;
+// 1) 스켈레톤 카드
+export function RickmortyEpisodeSkeletonCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <Skeleton className="h-8 w-40" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          <Skeleton className="h-4 w-40" />
+        </CardDescription>
+      </CardContent>
+    </Card>
+  );
 }
 
-// 1) episode가 없는 경우: 스켈레톤 카드
-// 2) episode가 있는 경우: 일반 카드 (클릭 시 세부정보 다이얼로그 뜸)
-export function RickmortyEpisodeCard({ episode }: OwnProps) {
-  if (!episode)
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <Skeleton className="h-8 w-40" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CardDescription>
-            <Skeleton className="h-4 w-40" />
-          </CardDescription>
-        </CardContent>
-      </Card>
-    );
+// 2) 일반 카드 (클릭 시 세부정보 다이얼로그 뜸)
+interface OwnProps {
+  episode: EpisodeInfo;
+  starredList: EpisodeInfo[];
+  setStarredList(starredList: EpisodeInfo[]): void;
+}
+
+export function RickmortyEpisodeCard({
+  episode,
+  starredList,
+  setStarredList,
+}: OwnProps) {
+  const starred = starredList.some((e) => e.id === episode.id);
+
+  // 즐겨찾기
+  const handleClickStar = (ep: EpisodeInfo) => {
+    const included = starredList.some((e) => e.id === ep.id);
+
+    if (included) setStarredList(starredList.filter((e) => e.id !== ep.id));
+    else setStarredList([...starredList, ep]);
+  };
 
   return (
     <Dialog>
@@ -47,7 +65,16 @@ export function RickmortyEpisodeCard({ episode }: OwnProps) {
           <CardHeader>
             <CardTitle>{episode.name}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
+            <div
+              className="absolute right-6 bottom-6 p-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClickStar(episode);
+              }}
+            >
+              <Star fill={starred ? "currentColor" : "none"} />
+            </div>
             <CardDescription>{episode.air_date}</CardDescription>
           </CardContent>
         </Card>

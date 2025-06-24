@@ -6,13 +6,21 @@ import type { LocationInfo } from "@/types/rickmorty.types";
 
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
-import { RickmortyLocationCard } from "@/components/shared/RickmortyLocationCard";
+import {
+  RickmortyLocationCard,
+  RickmortyLocationSkeletonCard,
+} from "@/components/shared/RickmortyLocationCard";
 import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
 import { RickmortyError } from "@/components/shared/RickmortyError";
+import { RickmortyShowStarred } from "../shared/RickmortyShowStarred";
 
 export function Locations() {
   const [page, setPage] = useState<number>(1);
   const [name, setName] = useState<string>("");
+
+  // 즐겨찾기 관련
+  const [showStarred, setShowStarred] = useState<boolean>(false);
+  const [starredList, setStarredList] = useState<LocationInfo[]>([]);
 
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_LOCATIONS,
@@ -43,17 +51,24 @@ export function Locations() {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 15 }).map((_, idx) => (
-          <RickmortyLocationCard key={idx} />
+          <RickmortyLocationSkeletonCard key={idx} />
         ))}
       </RickmortyReactiveGrid>
     );
   } else if (error && !loading) {
     content = <RickmortyError refetch={refetch} />;
   } else {
+    const showList = showStarred ? starredList : data.locations.results;
+
     content = (
       <RickmortyReactiveGrid>
-        {data.locations.results.map((location: LocationInfo) => (
-          <RickmortyLocationCard key={location.id} location={location} />
+        {showList.map((location: LocationInfo) => (
+          <RickmortyLocationCard
+            key={location.id}
+            location={location}
+            starredList={starredList}
+            setStarredList={setStarredList}
+          />
         ))}
       </RickmortyReactiveGrid>
     );
@@ -61,8 +76,12 @@ export function Locations() {
 
   return (
     <div>
-      <div className="pl-4">
+      <div className="pl-4 flex gap-4">
         <RickmortySearchField name={name} handleNameChange={handleNameChange} />
+        <RickmortyShowStarred
+          showStarred={showStarred}
+          setShowStarred={setShowStarred}
+        />
       </div>
       {content}
       <RickmortyPagination

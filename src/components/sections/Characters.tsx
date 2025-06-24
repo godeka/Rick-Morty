@@ -7,16 +7,24 @@ import type { CharacterInfo } from "@/types/rickmorty.types";
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
 import { RickmortySelect } from "@/components/shared/RickmortySelect";
-import { RickmortyCharacterCard } from "@/components/shared/RickmortyCharacterCard";
+import {
+  RickmortyCharacterCard,
+  RickmortyCharacterSkeletonCard,
+} from "@/components/shared/RickmortyCharacterCard";
 import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
 import { RickmortyError } from "@/components/shared/RickmortyError";
+import { RickmortyShowStarred } from "@/components/shared/RickmortyShowStarred";
 
 const STATUS_LIST = ["Alive", "Dead", "unknown"];
 
 export function Characters() {
   const [page, setPage] = useState<number>(1);
   const [name, setName] = useState<string>("");
-  const [status, setStatus] = useState<string>(""); // STATUS_LIST 중 하나의 값
+  const [status, setStatus] = useState<string>(""); // STATUS_LIST 중 하나 or ""
+
+  // 즐겨찾기 관련
+  const [showStarred, setShowStarred] = useState<boolean>(false);
+  const [starredList, setStarredList] = useState<CharacterInfo[]>([]);
 
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_CHARACTERS,
@@ -52,17 +60,24 @@ export function Characters() {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 12 }).map((_, idx) => (
-          <RickmortyCharacterCard key={idx} />
+          <RickmortyCharacterSkeletonCard key={idx} />
         ))}
       </RickmortyReactiveGrid>
     );
   } else if (error) {
     content = <RickmortyError refetch={refetch} />;
   } else {
+    const showList = showStarred ? starredList : data.characters.results;
+
     content = (
       <RickmortyReactiveGrid>
-        {data.characters.results.map((character: CharacterInfo) => (
-          <RickmortyCharacterCard key={character.id} character={character} />
+        {showList.map((character: CharacterInfo) => (
+          <RickmortyCharacterCard
+            key={character.id}
+            character={character}
+            starredList={starredList}
+            setStarredList={setStarredList}
+          />
         ))}
       </RickmortyReactiveGrid>
     );
@@ -75,6 +90,10 @@ export function Characters() {
         <RickmortySelect
           valueList={STATUS_LIST}
           handleValueChange={handleStatusChange}
+        />
+        <RickmortyShowStarred
+          showStarred={showStarred}
+          setShowStarred={setShowStarred}
         />
       </div>
       {content}

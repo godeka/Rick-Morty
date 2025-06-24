@@ -6,13 +6,21 @@ import type { EpisodeInfo } from "@/types/rickmorty.types";
 
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
-import { RickmortyEpisodeCard } from "@/components/shared/RickmortyEpisodeCard";
+import {
+  RickmortyEpisodeCard,
+  RickmortyEpisodeSkeletonCard,
+} from "@/components/shared/RickmortyEpisodeCard";
 import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
 import { RickmortyError } from "@/components/shared/RickmortyError";
+import { RickmortyShowStarred } from "@/components/shared/RickmortyShowStarred";
 
 export function Episodes() {
   const [page, setPage] = useState<number>(1);
   const [name, setName] = useState<string>("");
+
+  // 즐겨찾기 관련
+  const [showStarred, setShowStarred] = useState<boolean>(false);
+  const [starredList, setStarredList] = useState<EpisodeInfo[]>([]);
 
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_EPISODES,
@@ -41,17 +49,24 @@ export function Episodes() {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 20 }).map((_, idx) => (
-          <RickmortyEpisodeCard key={idx} />
+          <RickmortyEpisodeSkeletonCard key={idx} />
         ))}
       </RickmortyReactiveGrid>
     );
   } else if (error && !loading) {
     content = <RickmortyError refetch={refetch} />;
   } else {
+    const showList = showStarred ? starredList : data.episodes.results;
+
     content = (
       <RickmortyReactiveGrid>
-        {data.episodes.results.map((episode: EpisodeInfo) => (
-          <RickmortyEpisodeCard key={episode.id} episode={episode} />
+        {showList.map((episode: EpisodeInfo) => (
+          <RickmortyEpisodeCard
+            key={episode.id}
+            episode={episode}
+            starredList={starredList}
+            setStarredList={setStarredList}
+          />
         ))}
       </RickmortyReactiveGrid>
     );
@@ -59,8 +74,12 @@ export function Episodes() {
 
   return (
     <div>
-      <div className="pl-4">
+      <div className="pl-4 flex gap-4">
         <RickmortySearchField name={name} handleNameChange={handleNameChange} />
+        <RickmortyShowStarred
+          showStarred={showStarred}
+          setShowStarred={setShowStarred}
+        />
       </div>
       {content}
       <RickmortyPagination
