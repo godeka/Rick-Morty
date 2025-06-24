@@ -3,21 +3,12 @@ import { NetworkStatus, useQuery } from "@apollo/client";
 
 import { GET_LOCATIONS } from "@/graphql/location";
 import type { LocationInfo } from "@/types/rickmorty.types";
+
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
-import { RickmortyDialog } from "../shared/RickmortyDialog";
-import { RickmortyReactiveGrid } from "../shared/RickmortyReactiveGrid";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { RefreshCcw } from "lucide-react";
+import { RickmortyLocationCard } from "@/components/shared/RickmortyLocationCard";
+import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
+import { RickmortyError } from "@/components/shared/RickmortyError";
 
 export function Locations() {
   const [page, setPage] = useState<number>(1);
@@ -52,62 +43,18 @@ export function Locations() {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 15 }).map((_, idx) => (
-          <Card key={idx}>
-            <CardHeader>
-              <CardTitle>
-                <Skeleton className="h-5 w-48" />
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                <Skeleton className="h-16 w-48" />
-              </CardDescription>
-            </CardContent>
-          </Card>
+          <RickmortyLocationCard key={idx} />
         ))}
       </RickmortyReactiveGrid>
     );
   } else if (error && !loading) {
-    content = (
-      <div className="flex flex-col gap-4 items-center justify-center w-full h-[80vh]">
-        <h3>데이터를 가져오는 중 에러가 발생했습니다.</h3>
-        <Button onClick={() => refetch()}>
-          <RefreshCcw /> 재시도
-        </Button>
-      </div>
-    );
+    content = <RickmortyError refetch={refetch} />;
   } else {
     content = (
       <RickmortyReactiveGrid>
-        {data.locations.results.map((location: LocationInfo) => {
-          const card = (
-            <Card>
-              <CardHeader>
-                <CardTitle>{location.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>{location.type}</CardDescription>
-                <CardDescription>{location.dimension}</CardDescription>
-              </CardContent>
-            </Card>
-          );
-
-          const descriptions = [
-            `Type: ${location.type}`,
-            `Dimension: ${location.dimension}`,
-            `Created: ${location.created.split("T")[0]}`,
-            `Residents:`,
-            `${location.residents.map((res) => res.name)}`,
-          ];
-
-          return (
-            <RickmortyDialog
-              card={card}
-              title={location.name}
-              descriptions={descriptions}
-            />
-          );
-        })}
+        {data.locations.results.map((location: LocationInfo) => (
+          <RickmortyLocationCard key={location.id} location={location} />
+        ))}
       </RickmortyReactiveGrid>
     );
   }

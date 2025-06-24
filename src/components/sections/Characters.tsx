@@ -3,22 +3,13 @@ import { NetworkStatus, useQuery } from "@apollo/client";
 
 import { GET_CHARACTERS } from "@/graphql/character";
 import type { CharacterInfo } from "@/types/rickmorty.types";
+
 import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
-import { RickmortySelect } from "../shared/RickmortySelect";
-import { RickmortyDialog } from "../shared/RickmortyDialog";
-import { RickmortyReactiveGrid } from "../shared/RickmortyReactiveGrid";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { RefreshCcw } from "lucide-react";
+import { RickmortySelect } from "@/components/shared/RickmortySelect";
+import { RickmortyCharacterCard } from "@/components/shared/RickmortyCharacterCard";
+import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
+import { RickmortyError } from "@/components/shared/RickmortyError";
 
 const STATUS_LIST = ["Alive", "Dead", "unknown"];
 
@@ -55,74 +46,24 @@ export function Characters() {
     }
   };
 
-  const isRefetching = networkStatus === NetworkStatus.refetch;
-
   let content;
 
-  if (loading || isRefetching) {
+  if (loading || networkStatus === NetworkStatus.refetch) {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 12 }).map((_, idx) => (
-          <Card key={idx}>
-            <CardHeader>
-              <CardTitle>
-                <Skeleton className="h-5 w-48" />
-              </CardTitle>
-              <CardDescription>
-                <Skeleton className="h-4 w-24" />
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-48 w-48" />
-            </CardContent>
-          </Card>
+          <RickmortyCharacterCard key={idx} />
         ))}
       </RickmortyReactiveGrid>
     );
-  } else if (error && !loading) {
-    content = (
-      <div className="flex flex-col gap-4 items-center justify-center w-full h-[80vh]">
-        <h3>데이터를 가져오는 중 에러가 발생했습니다.</h3>
-        <Button onClick={() => refetch()}>
-          <RefreshCcw /> 재시도
-        </Button>
-      </div>
-    );
+  } else if (error) {
+    content = <RickmortyError refetch={refetch} />;
   } else {
     content = (
       <RickmortyReactiveGrid>
-        {data.characters.results.map((character: CharacterInfo) => {
-          const card = (
-            <Card>
-              <CardHeader>
-                <CardTitle>{character.name}</CardTitle>
-                <CardDescription>{character.status}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <img src={character.image} alt={character.name} />
-              </CardContent>
-            </Card>
-          );
-
-          const descriptions = [
-            `Species: ${character.species}`,
-            character.type && `Type: ${character.type}`,
-            `Gender: ${character.gender}`,
-            `Birthdate: ${character.created.split("T")[0]}`,
-            `Location: ${character.location.name}`,
-            `Number of episodes appeared: ${character.episode.length}`,
-          ];
-
-          return (
-            <RickmortyDialog
-              card={card}
-              title={character.name}
-              subtitle={character.status}
-              descriptions={descriptions}
-              imageUrl={character.image}
-            />
-          );
-        })}
+        {data.characters.results.map((character: CharacterInfo) => (
+          <RickmortyCharacterCard key={character.id} character={character} />
+        ))}
       </RickmortyReactiveGrid>
     );
   }
