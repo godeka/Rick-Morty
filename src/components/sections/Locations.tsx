@@ -77,7 +77,11 @@ export function Locations() {
   return (
     <div>
       <div className="pl-4 flex gap-4">
-        <RickmortySearchField name={name} handleNameChange={handleNameChange} />
+        <RickmortySearchField
+          disabled={showStarred}
+          name={name}
+          handleNameChange={handleNameChange}
+        />
         <RickmortyShowStarred
           showStarred={showStarred}
           setShowStarred={setShowStarred}

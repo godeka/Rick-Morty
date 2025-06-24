@@ -3,10 +3,15 @@ import { Search } from "lucide-react";
 
 interface OwnProps {
   name: string;
+  disabled: boolean;
   handleNameChange: (newName: string) => void;
 }
 
-export function RickmortySearchField({ name, handleNameChange }: OwnProps) {
+export function RickmortySearchField({
+  name,
+  disabled,
+  handleNameChange,
+}: OwnProps) {
   return (
     // Cursor AI 참고하여 수정 - Input 내에 Search 아이콘 들어가도록
     <div className="relative max-w-xs">
@@ -14,6 +19,7 @@ export function RickmortySearchField({ name, handleNameChange }: OwnProps) {
         <Search size={18} />
       </span>
       <Input
+        disabled={disabled}
         placeholder="Name"
         value={name}
         onChange={(e) => handleNameChange(e.target.value)}

@@ -8,12 +8,20 @@ import {
 
 interface OwnProps {
   valueList: string[];
+  disabled: boolean;
   handleValueChange: (newVal: string) => void;
 }
 
-export function RickmortySelect({ valueList, handleValueChange }: OwnProps) {
+export function RickmortySelect({
+  valueList,
+  disabled,
+  handleValueChange,
+}: OwnProps) {
   return (
-    <Select onValueChange={(newVal) => handleValueChange(newVal)}>
+    <Select
+      disabled={disabled}
+      onValueChange={(newVal) => handleValueChange(newVal)}
+    >
       <SelectTrigger className="w-[120px]">
         <SelectValue placeholder="Status" />
       </SelectTrigger>

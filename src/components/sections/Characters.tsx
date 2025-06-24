@@ -86,8 +86,13 @@ export function Characters() {
   return (
     <div>
       <div className="pl-4 flex items-center gap-4">
-        <RickmortySearchField name={name} handleNameChange={handleNameChange} />
+        <RickmortySearchField
+          disabled={showStarred}
+          name={name}
+          handleNameChange={handleNameChange}
+        />
         <RickmortySelect
+          disabled={showStarred}
           valueList={STATUS_LIST}
           handleValueChange={handleStatusChange}
         />
