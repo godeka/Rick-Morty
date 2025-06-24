@@ -14,17 +14,21 @@ import {
 import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
 import { RickmortyError } from "@/components/shared/RickmortyError";
 import { RickmortyShowStarred } from "@/components/shared/RickmortyShowStarred";
+import { usePersistedState } from "@/hooks/usePersistedState";
 
 const STATUS_LIST = ["Alive", "Dead", "unknown"];
 
 export function Characters() {
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = usePersistedState<number>("characterPage", 1);
   const [name, setName] = useState<string>("");
   const [status, setStatus] = useState<string>(""); // STATUS_LIST 중 하나 or ""
 
   // 즐겨찾기 관련
   const [showStarred, setShowStarred] = useState<boolean>(false);
-  const [starredList, setStarredList] = useState<CharacterInfo[]>([]);
+  const [starredList, setStarredList] = usePersistedState<CharacterInfo[]>(
+    "characterStarredList",
+    []
+  );
 
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_CHARACTERS,

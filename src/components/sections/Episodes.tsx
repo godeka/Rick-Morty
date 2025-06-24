@@ -13,14 +13,18 @@ import {
 import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
 import { RickmortyError } from "@/components/shared/RickmortyError";
 import { RickmortyShowStarred } from "@/components/shared/RickmortyShowStarred";
+import { usePersistedState } from "@/hooks/usePersistedState";
 
 export function Episodes() {
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = usePersistedState<number>("episodePage", 1);
   const [name, setName] = useState<string>("");
 
   // 즐겨찾기 관련
   const [showStarred, setShowStarred] = useState<boolean>(false);
-  const [starredList, setStarredList] = useState<EpisodeInfo[]>([]);
+  const [starredList, setStarredList] = usePersistedState<EpisodeInfo[]>(
+    "episodeStarredList",
+    []
+  );
 
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_EPISODES,

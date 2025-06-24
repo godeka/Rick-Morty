@@ -4,11 +4,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "./components/ui/switch";
 import { MoonStar } from "lucide-react";
 
-import { Characters } from "./components/sections/Characters";
-import { Locations } from "./components/sections/Locations";
-import { Episodes } from "./components/sections/Episodes";
+import { usePersistedState } from "@/hooks/usePersistedState";
+import { Characters } from "@/components/sections/Characters";
+import { Locations } from "@/components/sections/Locations";
+import { Episodes } from "@/components/sections/Episodes";
 
 function App() {
+  const [tab, setTab] = usePersistedState<string>("tab", "character");
+
+  const handleTabChange = (newVal: string) => {
+    setTab(newVal);
+  };
+
   // Cusor AI 참고 - 다크모드 구현
   const ThemeSwitcher = () => {
     const { theme, setTheme } = useTheme();
@@ -30,7 +37,7 @@ function App() {
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <div className="p-4">
         <ThemeSwitcher />
-        <Tabs defaultValue="character">
+        <Tabs value={tab} onValueChange={handleTabChange}>
           <TabsList>
             <TabsTrigger value="character">Character</TabsTrigger>
             <TabsTrigger value="location">Location</TabsTrigger>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NetworkStatus, useQuery } from "@apollo/client";
 
+import { usePersistedState } from "@/hooks/usePersistedState";
 import { GET_LOCATIONS } from "@/graphql/location";
 import type { LocationInfo } from "@/types/rickmorty.types";
 
@@ -12,15 +13,18 @@ import {
 } from "@/components/shared/RickmortyLocationCard";
 import { RickmortyReactiveGrid } from "@/components/shared/RickmortyReactiveGrid";
 import { RickmortyError } from "@/components/shared/RickmortyError";
-import { RickmortyShowStarred } from "../shared/RickmortyShowStarred";
+import { RickmortyShowStarred } from "@/components/shared/RickmortyShowStarred";
 
 export function Locations() {
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = usePersistedState<number>("locationPage", 1);
   const [name, setName] = useState<string>("");
 
   // 즐겨찾기 관련
   const [showStarred, setShowStarred] = useState<boolean>(false);
-  const [starredList, setStarredList] = useState<LocationInfo[]>([]);
+  const [starredList, setStarredList] = usePersistedState<LocationInfo[]>(
+    "locationStarredList",
+    []
+  );
 
   const { data, loading, error, refetch, networkStatus } = useQuery(
     GET_LOCATIONS,
