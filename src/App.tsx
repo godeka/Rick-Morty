@@ -1,11 +1,12 @@
 import { ThemeProvider, useTheme } from "@/components/theme-provider";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "./components/ui/switch";
+import { MoonStar } from "lucide-react";
 
 import { Characters } from "./components/sections/Characters";
 import { Locations } from "./components/sections/Locations";
 import { Episodes } from "./components/sections/Episodes";
-import { Switch } from "./components/ui/switch";
 
 function App() {
   // Cusor AI 참고 - 다크모드 구현
@@ -13,12 +14,15 @@ function App() {
     const { theme, setTheme } = useTheme();
 
     return (
-      <Switch
-        checked={theme === "dark"}
-        onCheckedChange={(checked) => {
-          setTheme(checked ? "dark" : "light");
-        }}
-      />
+      <div className="ml-5 flex gap-2 items-center">
+        <MoonStar size={20} />
+        <Switch
+          checked={theme === "dark"}
+          onCheckedChange={(checked) => {
+            setTheme(checked ? "dark" : "light");
+          }}
+        />
+      </div>
     );
   };
 
