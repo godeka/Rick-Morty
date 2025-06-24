@@ -1,3 +1,4 @@
+// Tailwind CSS 코드 Cursor AI 참고하여 작성
 import type { CharacterInfo } from "@/types/rickmorty.types";
 
 import {
@@ -63,9 +64,9 @@ export function RickmortyCharacterCard({
     <Dialog>
       <DialogTrigger>
         <Card>
-          <CardHeader className="relative">
+          <CardHeader className="relative items-center py-3">
             <div
-              className="absolute right-6 p-0"
+              className="absolute top-4 right-4 p-0"
               onClick={(e) => {
                 e.stopPropagation();
                 handleClickStar(character);
@@ -73,7 +74,9 @@ export function RickmortyCharacterCard({
             >
               <Star fill={starred ? "currentColor" : "none"} />
             </div>
-            <CardTitle>{character.name}</CardTitle>
+            <CardTitle className="max-w-[75%] truncate leading-normal">
+              {character.name}
+            </CardTitle>
             <CardDescription>{character.status}</CardDescription>
           </CardHeader>
           <CardContent>
