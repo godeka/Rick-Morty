@@ -97,11 +97,13 @@ export function Characters() {
         />
       </div>
       {content}
-      <RickmortyPagination
-        page={page}
-        totalPages={data?.characters.info.pages}
-        handlePageChange={handlePageChange}
-      />
+      {!showStarred && (
+        <RickmortyPagination
+          page={page}
+          totalPages={data?.characters.info.pages}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }

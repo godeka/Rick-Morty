@@ -82,11 +82,13 @@ export function Episodes() {
         />
       </div>
       {content}
-      <RickmortyPagination
-        page={page}
-        totalPages={data?.episodes.info.pages}
-        handlePageChange={handlePageChange}
-      />
+      {!showStarred && (
+        <RickmortyPagination
+          page={page}
+          totalPages={data?.episodes.info.pages}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }

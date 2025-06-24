@@ -84,11 +84,13 @@ export function Locations() {
         />
       </div>
       {content}
-      <RickmortyPagination
-        page={page}
-        totalPages={data?.locations.info.pages}
-        handlePageChange={handlePageChange}
-      />
+      {!showStarred && (
+        <RickmortyPagination
+          page={page}
+          totalPages={data?.locations.info.pages}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }
