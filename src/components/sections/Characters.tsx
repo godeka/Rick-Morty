@@ -120,7 +120,7 @@ export function Characters() {
 
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="pl-4 flex items-center gap-4">
         <RickmortySearchField name={name} handleNameChange={handleNameChange} />
         <RickmortySelect
           valueList={STATUS_LIST}

@@ -8,12 +8,16 @@ interface OwnProps {
 
 export function RickmortySearchField({ name, handleNameChange }: OwnProps) {
   return (
-    <div className="flex w-full max-w-xs items-center gap-2">
-      <Search />
+    // Cursor AI 참고하여 수정 - Input 내에 Search 아이콘 들어가도록
+    <div className="relative max-w-xs">
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+        <Search size={18} />
+      </span>
       <Input
         placeholder="Name"
         value={name}
         onChange={(e) => handleNameChange(e.target.value)}
+        className="pl-10"
       />
     </div>
   );

@@ -105,7 +105,9 @@ export function Locations() {
 
   return (
     <div>
-      <RickmortySearchField name={name} handleNameChange={handleNameChange} />
+      <div className="pl-4">
+        <RickmortySearchField name={name} handleNameChange={handleNameChange} />
+      </div>
       <div className="p-4 grid grid-cols-5 gap-4">{content}</div>
       <RickmortyPagination
         page={page}
