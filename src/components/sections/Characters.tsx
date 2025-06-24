@@ -7,6 +7,7 @@ import { RickmortyPagination } from "@/components/shared/RickmortyPagination";
 import { RickmortySearchField } from "@/components/shared/RickmortySearchField";
 import { RickmortySelect } from "../shared/RickmortySelect";
 import { RickmortyDialog } from "../shared/RickmortyDialog";
+import { RickmortyReactiveGrid } from "../shared/RickmortyReactiveGrid";
 
 import {
   Card,
@@ -59,66 +60,73 @@ export function Characters() {
   let content;
 
   if (loading || isRefetching) {
-    content = Array.from({ length: 12 }).map((_, idx) => (
-      <Card key={idx}>
-        <CardHeader>
-          <CardTitle>
-            <Skeleton className="h-5 w-48" />
-          </CardTitle>
-          <CardDescription>
-            <Skeleton className="h-4 w-24" />
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="h-48 w-48" />
-        </CardContent>
-      </Card>
-    ));
+    content = (
+      <RickmortyReactiveGrid>
+        {Array.from({ length: 12 }).map((_, idx) => (
+          <Card key={idx}>
+            <CardHeader>
+              <CardTitle>
+                <Skeleton className="h-5 w-48" />
+              </CardTitle>
+              <CardDescription>
+                <Skeleton className="h-4 w-24" />
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-48 w-48" />
+            </CardContent>
+          </Card>
+        ))}
+      </RickmortyReactiveGrid>
+    );
   } else if (error && !loading) {
     content = (
-      <>
+      <div className="flex flex-col gap-4 items-center justify-center w-full h-[80vh]">
         <h3>데이터를 가져오는 중 에러가 발생했습니다.</h3>
         <Button onClick={() => refetch()}>
           <RefreshCcw /> 재시도
         </Button>
-      </>
+      </div>
     );
   } else {
-    content = data.characters.results.map((character: CharacterInfo) => {
-      const card = (
-        <Card>
-          <CardHeader>
-            <CardTitle>{character.name}</CardTitle>
-            <CardDescription>{character.status}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <img src={character.image} alt={character.name} />
-          </CardContent>
-        </Card>
-      );
+    content = (
+      <RickmortyReactiveGrid>
+        {data.characters.results.map((character: CharacterInfo) => {
+          const card = (
+            <Card>
+              <CardHeader>
+                <CardTitle>{character.name}</CardTitle>
+                <CardDescription>{character.status}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <img src={character.image} alt={character.name} />
+              </CardContent>
+            </Card>
+          );
 
-      const descriptions = [
-        `Species: ${character.species}`,
-        character.type && `Type: ${character.type}`,
-        `Gender: ${character.gender}`,
-        `Birthdate: ${character.created.split("T")[0]}`,
-        `Location: ${character.location.name}`,
-        `Number of episodes appeared: ${character.episode.length}`,
-      ];
+          const descriptions = [
+            `Species: ${character.species}`,
+            character.type && `Type: ${character.type}`,
+            `Gender: ${character.gender}`,
+            `Birthdate: ${character.created.split("T")[0]}`,
+            `Location: ${character.location.name}`,
+            `Number of episodes appeared: ${character.episode.length}`,
+          ];
 
-      return (
-        <RickmortyDialog
-          card={card}
-          title={character.name}
-          subtitle={character.status}
-          descriptions={descriptions}
-          imageUrl={character.image}
-        />
-      );
-    });
+          return (
+            <RickmortyDialog
+              card={card}
+              title={character.name}
+              subtitle={character.status}
+              descriptions={descriptions}
+              imageUrl={character.image}
+            />
+          );
+        })}
+      </RickmortyReactiveGrid>
+    );
   }
 
-  // Cursor AI 참고 - 카드 그리드 반응형으로 수정
   return (
     <div>
       <div className="pl-4 flex items-center gap-4">
@@ -128,9 +136,7 @@ export function Characters() {
           handleValueChange={handleStatusChange}
         />
       </div>
-      <div className="p-4 gap-4 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {content}
-      </div>
+      {content}
       <RickmortyPagination
         page={page}
         totalPages={data?.characters.info.pages}
