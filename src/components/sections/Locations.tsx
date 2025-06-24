@@ -48,16 +48,16 @@ export function Locations() {
   let content;
 
   if (loading || isRefetching) {
-    content = Array.from({ length: 6 }).map((_, idx) => (
+    content = Array.from({ length: 15 }).map((_, idx) => (
       <Card key={idx}>
         <CardHeader>
           <CardTitle>
-            <Skeleton className="h-[20px] w-[150px]" />
+            <Skeleton className="h-5 w-48" />
           </CardTitle>
         </CardHeader>
         <CardContent>
           <CardDescription>
-            <Skeleton className="h-[80px] w-[300px]" />
+            <Skeleton className="h-16 w-48" />
           </CardDescription>
         </CardContent>
       </Card>
@@ -85,27 +85,19 @@ export function Locations() {
         </Card>
       );
 
-      const description = (
-        <>
-          Type: {location.type}
-          <br />
-          Dimension: {location.dimension}
-          <br />
-          Created: {location.created.split("T")[0]}
-          <br />
-          <br />
-          Residents:{" "}
-          {location.residents.map((res, idx) =>
-            idx < location.residents.length - 1 ? `${res.name}, ` : res.name
-          )}
-        </>
-      );
+      const descriptions = [
+        `Type: ${location.type}`,
+        `Dimension: ${location.dimension}`,
+        `Created: ${location.created.split("T")[0]}`,
+        `Residents:`,
+        `${location.residents.map((res) => res.name)}`,
+      ];
 
       return (
         <RickmortyDialog
           card={card}
           title={location.name}
-          description={description}
+          descriptions={descriptions}
         />
       );
     });
@@ -114,7 +106,7 @@ export function Locations() {
   return (
     <div>
       <RickmortySearchField name={name} handleNameChange={handleNameChange} />
-      {content}
+      <div className="p-4 grid grid-cols-5 gap-4">{content}</div>
       <RickmortyPagination
         page={page}
         totalPages={data?.locations.info.pages}

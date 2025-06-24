@@ -8,7 +8,7 @@ interface OwnProps {
 
 export function RickmortySearchField({ name, handleNameChange }: OwnProps) {
   return (
-    <div className="flex w-full max-w-sm items-center gap-2">
+    <div className="flex w-full max-w-xs items-center gap-2">
       <Search />
       <Input
         placeholder="Name"

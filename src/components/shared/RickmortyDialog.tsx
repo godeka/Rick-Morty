@@ -11,7 +11,7 @@ interface OwnProps {
   card: React.ReactNode;
   title: string;
   subtitle?: string;
-  description: React.ReactNode;
+  descriptions: React.ReactNode[];
   imageUrl?: string;
 }
 
@@ -19,7 +19,7 @@ export function RickmortyDialog({
   card,
   title,
   subtitle,
-  description,
+  descriptions,
   imageUrl,
 }: OwnProps) {
   return (
@@ -30,7 +30,9 @@ export function RickmortyDialog({
           <DialogTitle>{title}</DialogTitle>
           {subtitle && <DialogDescription>{subtitle}</DialogDescription>}
           {imageUrl && <img src={imageUrl} alt={title} />}
-          <DialogDescription>{description}</DialogDescription>
+          {descriptions.map((des) =>
+            des ? <DialogDescription>{des}</DialogDescription> : null
+          )}
         </DialogHeader>
       </DialogContent>
     </Dialog>

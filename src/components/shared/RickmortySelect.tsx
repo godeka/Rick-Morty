@@ -14,7 +14,7 @@ interface OwnProps {
 export function RickmortySelect({ valueList, handleValueChange }: OwnProps) {
   return (
     <Select onValueChange={(newVal) => handleValueChange(newVal)}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[120px]">
         <SelectValue placeholder="Status" />
       </SelectTrigger>
       <SelectContent>

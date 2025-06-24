@@ -7,8 +7,8 @@ import { Episodes } from "./components/sections/Episodes";
 
 function App() {
   return (
-    <div>
-      <Tabs defaultValue="character" className="w-[400px]">
+    <div className="p-4">
+      <Tabs defaultValue="character">
         <TabsList>
           <TabsTrigger value="character">Character</TabsTrigger>
           <TabsTrigger value="location">Location</TabsTrigger>

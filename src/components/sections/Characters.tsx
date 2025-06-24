@@ -59,18 +59,18 @@ export function Characters() {
   let content;
 
   if (loading || isRefetching) {
-    content = Array.from({ length: 6 }).map((_, idx) => (
+    content = Array.from({ length: 12 }).map((_, idx) => (
       <Card key={idx}>
         <CardHeader>
           <CardTitle>
-            <Skeleton className="h-[20px] w-[300px]" />
+            <Skeleton className="h-5 w-48" />
           </CardTitle>
           <CardDescription>
-            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-4 w-24" />
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Skeleton className="h-[300px] w-[300px]" />
+          <Skeleton className="h-48 w-48" />
         </CardContent>
       </Card>
     ));
@@ -97,27 +97,21 @@ export function Characters() {
         </Card>
       );
 
-      const description = (
-        <>
-          Species: {character.species}
-          {character.type && ` / Type: ${character.type}`}
-          <br />
-          Gender: {character.gender}
-          <br />
-          Birthdate: {character.created.split("T")[0]}
-          <br />
-          Location: {character.location.name}
-          <br />
-          Number of episodes appeared: {character.episode.length}
-        </>
-      );
+      const descriptions = [
+        `Species: ${character.species}`,
+        character.type && `Type: ${character.type}`,
+        `Gender: ${character.gender}`,
+        `Birthdate: ${character.created.split("T")[0]}`,
+        `Location: ${character.location.name}`,
+        `Number of episodes appeared: ${character.episode.length}`,
+      ];
 
       return (
         <RickmortyDialog
           card={card}
           title={character.name}
           subtitle={character.status}
-          description={description}
+          descriptions={descriptions}
           imageUrl={character.image}
         />
       );
@@ -126,12 +120,14 @@ export function Characters() {
 
   return (
     <div>
-      <RickmortySelect
-        valueList={STATUS_LIST}
-        handleValueChange={handleStatusChange}
-      />
-      <RickmortySearchField name={name} handleNameChange={handleNameChange} />
-      {content}
+      <div className="flex items-center gap-2">
+        <RickmortySearchField name={name} handleNameChange={handleNameChange} />
+        <RickmortySelect
+          valueList={STATUS_LIST}
+          handleValueChange={handleStatusChange}
+        />
+      </div>
+      <div className="p-4 grid grid-cols-4 gap-4">{content}</div>
       <RickmortyPagination
         page={page}
         totalPages={data?.characters.info.pages}

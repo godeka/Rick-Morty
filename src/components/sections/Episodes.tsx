@@ -48,16 +48,16 @@ export function Episodes() {
   let content;
 
   if (loading || isRefetching) {
-    content = Array.from({ length: 6 }).map((_, idx) => (
+    content = Array.from({ length: 20 }).map((_, idx) => (
       <Card key={idx}>
         <CardHeader>
           <CardTitle>
-            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-8 w-40" />
           </CardTitle>
         </CardHeader>
         <CardContent>
           <CardDescription>
-            <Skeleton className="h-[20px] w-[200px]" />
+            <Skeleton className="h-4 w-40" />
           </CardDescription>
         </CardContent>
       </Card>
@@ -84,27 +84,19 @@ export function Episodes() {
         </Card>
       );
 
-      const description = (
-        <>
-          Code: {episode.episode}
-          <br />
-          Air date: {episode.air_date}
-          <br />
-          Created: {episode.created.split("T")[0]}
-          <br />
-          <br />
-          Characters:{" "}
-          {episode.characters.map((char, idx) =>
-            idx < episode.characters.length - 1 ? `${char.name}, ` : char.name
-          )}
-        </>
-      );
+      const descriptions = [
+        `Code: ${episode.episode}`,
+        `Air date: ${episode.air_date}`,
+        `Created: ${episode.created.split("T")[0]}`,
+        `Characters:`,
+        `${episode.characters.map((char) => char.name)}`,
+      ];
 
       return (
         <RickmortyDialog
           card={card}
           title={episode.name}
-          description={description}
+          descriptions={descriptions}
         />
       );
     });
@@ -113,7 +105,7 @@ export function Episodes() {
   return (
     <div>
       <RickmortySearchField name={name} handleNameChange={handleNameChange} />
-      {content}
+      <div className="p-4 grid grid-cols-5 gap-4">{content}</div>
       <RickmortyPagination
         page={page}
         totalPages={data?.episodes.info.pages}
