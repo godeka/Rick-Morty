@@ -50,7 +50,7 @@ export function Characters() {
 
   const handleStatusChange = (newStatus: string) => {
     if (newStatus !== status) {
-      setStatus(newStatus);
+      setStatus(newStatus === "all" ? "" : newStatus);
       setPage(1); // 다시 1페이지로
     }
   };

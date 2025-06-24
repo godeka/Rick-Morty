@@ -18,6 +18,7 @@ export function RickmortySelect({ valueList, handleValueChange }: OwnProps) {
         <SelectValue placeholder="Status" />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value="all">View All</SelectItem>
         {valueList.map((value, idx) => (
           <SelectItem key={idx} value={value}>
             {value}
