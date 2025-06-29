@@ -56,6 +56,70 @@ src/
 
 <br/>
 
+## 📍 엔드포인트 및 쿼리
+
+- 엔드포인트: https://rickandmortyapi.com/graphql
+- 쿼리: characters, episodes, locations 순
+```
+characters(page: $page, filter: { name: $name, status: $status }) {
+  info {
+    pages
+  }
+  results {
+    id
+    image
+    name
+    status
+    gender
+    species
+    type
+    created
+    location {
+      name
+    }
+    episode {
+      name
+    }
+  }
+}
+```
+```
+episodes(page: $page, filter: { name: $name }) {
+  info {
+    pages
+  }
+  results {
+    id
+    name
+    air_date
+    episode
+    characters {
+      name
+    }
+    created
+  }
+}
+```
+```
+locations(page: $page, filter: { name: $name }) {
+  info {
+    pages
+  }
+  results {
+    id
+    name
+    type
+    dimension
+    residents {
+      name
+    }
+    created
+  }
+}
+```
+
+<br/>
+
 ## 🐛 Known Issues (개선 예정)
 
 - 데이터 페칭 중에 페이지네이션의 번호가 사라지는 이슈
