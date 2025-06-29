@@ -2,6 +2,7 @@
 
 애니메이션 Rick & Morty의 캐릭터, 로케이션, 에피소드를 탐색할 수 있는 웹앱입니다. <br/>
 React + TypeScript + Vite 기반의 SPA로 구성했으며, GraphQL + Apollo Client로 데이터 요청을 처리하고, Tailwind CSS 및 Shadcn 으로 UI를 구현했습니다.
+> https://rickmorty-explorer.netlify.app/
 
 <br/>
 
