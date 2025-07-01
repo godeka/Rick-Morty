@@ -98,6 +98,7 @@ export function Characters() {
         <RickmortySelect
           disabled={showStarred}
           valueList={STATUS_LIST}
+          value={status}
           handleValueChange={handleStatusChange}
         />
         <RickmortyShowStarred
