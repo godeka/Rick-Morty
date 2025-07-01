@@ -17,7 +17,7 @@ import { RickmortyShowStarred } from "@/components/shared/RickmortyShowStarred";
 
 export function Locations() {
   const [page, setPage] = usePersistedState<number>("locationPage", 1);
-  const [name, setName] = useState<string>("");
+  const [name, setName] = usePersistedState<string>("locationName", "");
 
   // 즐겨찾기 관련
   const [showStarred, setShowStarred] = useState<boolean>(false);

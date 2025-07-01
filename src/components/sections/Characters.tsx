@@ -20,8 +20,8 @@ const STATUS_LIST = ["Alive", "Dead", "unknown"];
 
 export function Characters() {
   const [page, setPage] = usePersistedState<number>("characterPage", 1);
-  const [name, setName] = useState<string>("");
-  const [status, setStatus] = useState<string>(""); // STATUS_LIST 중 하나 or ""
+  const [name, setName] = usePersistedState<string>("characterName", "");
+  const [status, setStatus] = usePersistedState<string>("characterStatus", ""); // STATUS_LIST 중 하나 or ""
 
   // 즐겨찾기 관련
   const [showStarred, setShowStarred] = useState<boolean>(false);

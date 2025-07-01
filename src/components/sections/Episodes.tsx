@@ -17,7 +17,7 @@ import { usePersistedState } from "@/hooks/usePersistedState";
 
 export function Episodes() {
   const [page, setPage] = usePersistedState<number>("episodePage", 1);
-  const [name, setName] = useState<string>("");
+  const [name, setName] = usePersistedState<string>("episodeName", "");
 
   // 즐겨찾기 관련
   const [showStarred, setShowStarred] = useState<boolean>(false);
