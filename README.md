@@ -2,6 +2,7 @@
 
 애니메이션 Rick & Morty의 캐릭터, 로케이션, 에피소드를 탐색할 수 있는 웹앱입니다. <br/>
 React + TypeScript + Vite 기반의 SPA로 구성했으며, GraphQL + Apollo Client로 데이터 요청을 처리하고, Tailwind CSS 및 Shadcn 으로 UI를 구현했습니다.
+> https://rickmorty-explorer.netlify.app/
 
 <br/>
 
@@ -53,6 +54,70 @@ src/
 3) 새로고침 시에도 탭 상태, 페이지 상태, 즐겨찾기 목록 유지 - localStorage에 저장하여 구현. (필터링 상태는 초기화되는 것이 낫다고 판단하여 제외)
 ```
 
+
+<br/>
+
+## 📍 엔드포인트 및 쿼리
+
+- 엔드포인트: https://rickandmortyapi.com/graphql
+- 쿼리: characters, episodes, locations 순
+```
+characters(page: $page, filter: { name: $name, status: $status }) {
+  info {
+    pages
+  }
+  results {
+    id
+    image
+    name
+    status
+    gender
+    species
+    type
+    created
+    location {
+      name
+    }
+    episode {
+      name
+    }
+  }
+}
+```
+```
+episodes(page: $page, filter: { name: $name }) {
+  info {
+    pages
+  }
+  results {
+    id
+    name
+    air_date
+    episode
+    characters {
+      name
+    }
+    created
+  }
+}
+```
+```
+locations(page: $page, filter: { name: $name }) {
+  info {
+    pages
+  }
+  results {
+    id
+    name
+    type
+    dimension
+    residents {
+      name
+    }
+    created
+  }
+}
+```
 
 <br/>
 
