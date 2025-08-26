@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NetworkStatus, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { GET_CHARACTERS } from "@/graphql/character";
 import type { CharacterInfo } from "@/types/rickmorty.types";
@@ -30,7 +30,7 @@ export function Characters() {
     []
   );
 
-  const { data, loading, error, refetch, networkStatus } = useQuery(
+  const { data, previousData, loading, error, refetch } = useQuery(
     GET_CHARACTERS,
     {
       variables: { page, name, status },
@@ -60,7 +60,7 @@ export function Characters() {
 
   let content;
 
-  if (loading || networkStatus === NetworkStatus.refetch) {
+  if (loading && !data) {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 12 }).map((_, idx) => (
@@ -110,7 +110,11 @@ export function Characters() {
       {!showStarred && (
         <RickmortyPagination
           page={page}
-          totalPages={data?.characters.info.pages}
+          totalPages={
+            data?.characters?.info?.pages ??
+            previousData?.characters?.info?.pages ??
+            1
+          }
           handlePageChange={handlePageChange}
         />
       )}
