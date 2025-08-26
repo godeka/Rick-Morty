@@ -76,6 +76,9 @@ export function Episodes() {
     );
   }
 
+  const totalPages =
+    data?.episodes?.info?.pages ?? previousData?.episodes?.info?.pages;
+
   return (
     <div>
       <div className="pl-4 flex gap-4">
@@ -90,14 +93,10 @@ export function Episodes() {
         />
       </div>
       {content}
-      {!showStarred && (
+      {!showStarred && !error && totalPages > 1 && (
         <RickmortyPagination
           page={page}
-          totalPages={
-            data?.episodes?.info?.pages ??
-            previousData?.episodes?.info?.pages ??
-            1
-          }
+          totalPages={totalPages}
           handlePageChange={handlePageChange}
         />
       )}

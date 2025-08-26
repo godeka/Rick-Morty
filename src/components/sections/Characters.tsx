@@ -87,6 +87,9 @@ export function Characters() {
     );
   }
 
+  const totalPages =
+    data?.characters?.info?.pages ?? previousData?.characters?.info?.pages;
+
   return (
     <div>
       <div className="pl-4 flex items-center gap-4">
@@ -107,14 +110,10 @@ export function Characters() {
         />
       </div>
       {content}
-      {!showStarred && (
+      {!showStarred && !error && totalPages > 1 && (
         <RickmortyPagination
           page={page}
-          totalPages={
-            data?.characters?.info?.pages ??
-            previousData?.characters?.info?.pages ??
-            1
-          }
+          totalPages={totalPages}
           handlePageChange={handlePageChange}
         />
       )}

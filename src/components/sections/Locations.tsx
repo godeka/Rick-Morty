@@ -76,6 +76,9 @@ export function Locations() {
     );
   }
 
+  const totalPages =
+    data?.locations?.info?.pages ?? previousData?.locations?.info?.pages;
+
   return (
     <div>
       <div className="pl-4 flex gap-4">
@@ -90,14 +93,10 @@ export function Locations() {
         />
       </div>
       {content}
-      {!showStarred && (
+      {!showStarred && !error && totalPages > 1 && (
         <RickmortyPagination
           page={page}
-          totalPages={
-            data?.locations?.info?.pages ??
-            previousData?.locations?.info?.pages ??
-            1
-          }
+          totalPages={totalPages}
           handlePageChange={handlePageChange}
         />
       )}
