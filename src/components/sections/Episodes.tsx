@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NetworkStatus, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { GET_EPISODES } from "@/graphql/episode";
 import type { EpisodeInfo } from "@/types/rickmorty.types";
@@ -26,7 +26,7 @@ export function Episodes() {
     []
   );
 
-  const { data, loading, error, refetch, networkStatus } = useQuery(
+  const { data, previousData, loading, error, refetch } = useQuery(
     GET_EPISODES,
     {
       variables: { page, name },
@@ -49,7 +49,7 @@ export function Episodes() {
 
   let content;
 
-  if (loading || networkStatus === NetworkStatus.refetch) {
+  if (loading && !data) {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 20 }).map((_, idx) => (
@@ -76,6 +76,9 @@ export function Episodes() {
     );
   }
 
+  const totalPages =
+    data?.episodes?.info?.pages ?? previousData?.episodes?.info?.pages;
+
   return (
     <div>
       <div className="pl-4 flex gap-4">
@@ -90,10 +93,10 @@ export function Episodes() {
         />
       </div>
       {content}
-      {!showStarred && (
+      {!showStarred && !error && totalPages > 1 && (
         <RickmortyPagination
           page={page}
-          totalPages={data?.episodes.info.pages}
+          totalPages={totalPages}
           handlePageChange={handlePageChange}
         />
       )}

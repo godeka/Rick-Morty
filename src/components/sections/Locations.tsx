@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NetworkStatus, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { usePersistedState } from "@/hooks/usePersistedState";
 import { GET_LOCATIONS } from "@/graphql/location";
@@ -26,7 +26,7 @@ export function Locations() {
     []
   );
 
-  const { data, loading, error, refetch, networkStatus } = useQuery(
+  const { data, previousData, loading, error, refetch } = useQuery(
     GET_LOCATIONS,
     {
       variables: { page, name },
@@ -47,11 +47,9 @@ export function Locations() {
     }
   };
 
-  const isRefetching = networkStatus === NetworkStatus.refetch;
-
   let content;
 
-  if (loading || isRefetching) {
+  if (loading && !data) {
     content = (
       <RickmortyReactiveGrid>
         {Array.from({ length: 15 }).map((_, idx) => (
@@ -78,6 +76,9 @@ export function Locations() {
     );
   }
 
+  const totalPages =
+    data?.locations?.info?.pages ?? previousData?.locations?.info?.pages;
+
   return (
     <div>
       <div className="pl-4 flex gap-4">
@@ -92,10 +93,10 @@ export function Locations() {
         />
       </div>
       {content}
-      {!showStarred && (
+      {!showStarred && !error && totalPages > 1 && (
         <RickmortyPagination
           page={page}
-          totalPages={data?.locations.info.pages}
+          totalPages={totalPages}
           handlePageChange={handlePageChange}
         />
       )}
